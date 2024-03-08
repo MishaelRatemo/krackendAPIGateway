@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: krakend-deployment
+  labels: 
+    app: krakend-api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: krakenD
+  template:
+    metadata:
+      labels:
+        app: krakenD
+    spec:
+      containers:
+      - name: api-gateway
+        image: krakend-api-gateway
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always
+        command: ["/usr/bin/krakend"]
+        args: ["run","-d","-c","/etc/krakend/krakend.json","-p","8080"]
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
